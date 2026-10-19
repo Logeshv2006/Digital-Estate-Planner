@@ -7,9 +7,10 @@ node_modules/
 dist/
 build/
 
-# Environment Variables
-# (Uncomment the line below if you want to keep your real .env private on GitHub)
-# .env
+# Environment Variables — NEVER commit real secrets!
+.env
+.env.local
+.env.production
 
 # Logs & Runtime
 npm-debug.log*
