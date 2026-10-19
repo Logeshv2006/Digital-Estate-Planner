@@ -172,7 +172,7 @@ export default function App() {
 
   // Notifications & logs
   const [emailLogs, setEmailLogs] = useState<EmailDispatchLog[]>([]);
-  const [testEmailRecipient, setTestEmailRecipient] = useState<string>('agileshlogesh@gmail.com');
+  const [testEmailRecipient, setTestEmailRecipient] = useState<string>('');
   const [sendingEmail, setSendingEmail] = useState(false);
   const [selectedLogPreview, setSelectedLogPreview] = useState<EmailDispatchLog | null>(null);
 
@@ -241,7 +241,7 @@ export default function App() {
 
       if (profileRes.data?.user) {
         setCurrentUser(profileRes.data.user);
-        setTestEmailRecipient(profileRes.data.user.email || 'agileshlogesh@gmail.com');
+        setTestEmailRecipient(profileRes.data.user.email || '');
       }
     } catch (err) {
       console.error('Data loading error:', err);
@@ -268,7 +268,7 @@ export default function App() {
         localStorage.setItem('digital_estate_user', JSON.stringify(res.data.user));
         setToken(res.data.token);
         setCurrentUser(res.data.user);
-        setTestEmailRecipient(res.data.user.email);
+        setTestEmailRecipient(res.data.user.email || '');
         showMessage(res.data.message || 'Authentication successful!', 'success');
         setCurrentPage('dashboard');
         setAuthFormData({ name: '', email: '', password: '' });
@@ -436,7 +436,8 @@ export default function App() {
   const handleSendTestEmail = async () => {
     setSendingEmail(true);
     try {
-      const res = await API.post('/notifications/test-email', { targetEmail: testEmailRecipient });
+      const recipientEmail = testEmailRecipient || currentUser?.email || '';
+      const res = await API.post('/notifications/test-email', { targetEmail: recipientEmail });
       if (res.data?.logs) setEmailLogs(res.data.logs);
       showMessage(res.data.message || 'Notification test dispatched!', res.data.realEmailSent ? 'success' : 'info');
     } catch (err: any) {
@@ -504,13 +505,12 @@ export default function App() {
         {/* Toast Feedback */}
         {feedback.message && (
           <div
-            className={`fixed top-5 right-5 z-50 max-w-md px-5 py-3.5 rounded-2xl shadow-2xl border text-xs sm:text-sm font-semibold flex items-center gap-3 backdrop-blur-xl animate-float-subtle ${
-              feedback.type === 'danger'
+            className={`fixed top-5 right-5 z-50 max-w-md px-5 py-3.5 rounded-2xl shadow-2xl border text-xs sm:text-sm font-semibold flex items-center gap-3 backdrop-blur-xl animate-float-subtle ${feedback.type === 'danger'
                 ? 'bg-rose-950/90 text-rose-200 border-rose-700/80'
                 : feedback.type === 'warning'
-                ? 'bg-amber-950/90 text-amber-200 border-amber-700/80'
-                : 'bg-emerald-950/90 text-emerald-200 border-emerald-600/80'
-            }`}
+                  ? 'bg-amber-950/90 text-amber-200 border-amber-700/80'
+                  : 'bg-emerald-950/90 text-emerald-200 border-emerald-600/80'
+              }`}
           >
             {feedback.type === 'danger' ? (
               <AlertTriangle className="w-5 h-5 shrink-0 text-rose-400" />
@@ -523,41 +523,39 @@ export default function App() {
 
         {/* Branding Header */}
         <div className="text-center mb-8 max-w-lg z-10">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-slate-950 shadow-2xl glow-emerald mb-5 ring-1 ring-emerald-400/40">
-            <Shield className="w-10 h-10 text-slate-950" />
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-tr from-indigo-500 to-sky-400 text-white shadow-xl glow-indigo mb-4 ring-1 ring-white/20">
+            <Shield className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight font-display">
-            Digital Estate <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400">Planner</span>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-display">
+            Digital Estate <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-sky-300 to-teal-300">Planner</span>
           </h1>
-          <p className="text-slate-400 text-sm mt-3 leading-relaxed">
-            Preserve digital assets, assign trusted beneficiaries, and maintain periodic check-in safety verification protocols.
+          <p className="text-slate-400 text-xs sm:text-sm mt-2 leading-relaxed">
+            Securely preserve digital accounts, assign trusted beneficiaries, and maintain periodic verification protocols.
           </p>
         </div>
 
         {/* Auth Card */}
-        <div className="w-full max-w-md glass-card rounded-3xl p-8 border border-emerald-500/20 shadow-2xl relative z-10">
+        <div className="w-full max-w-md glass-card rounded-2xl p-7 border border-white/10 shadow-2xl relative z-10">
           {/* Subtle top indicator bar */}
-          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-500"></div>
+          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 via-sky-400 to-teal-400 rounded-t-2xl"></div>
 
           {/* Tab Selector */}
-          <div className="flex bg-slate-900/90 p-1.5 rounded-2xl mb-6 border border-slate-800/80">
+          <div className="flex bg-slate-900/80 p-1 rounded-xl mb-6 border border-slate-800">
             <button
               onClick={() => setAuthMode('login')}
-              className={`flex-1 py-2.5 text-xs font-bold rounded-xl transition-all ${
-                authMode === 'login'
-                  ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md glow-emerald'
+              className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all ${authMode === 'login'
+                  ? 'bg-indigo-600 text-white shadow-md'
                   : 'text-slate-400 hover:text-white'
-              }`}
+                }`}
             >
               Sign In
             </button>
             <button
               onClick={() => setAuthMode('register')}
-              className={`flex-1 py-2.5 text-xs font-bold rounded-xl transition-all ${
-                authMode === 'register'
-                  ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md glow-emerald'
+              className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all ${authMode === 'register'
+                  ? 'bg-indigo-600 text-white shadow-md'
                   : 'text-slate-400 hover:text-white'
-              }`}
+                }`}
             >
               Create Account
             </button>
@@ -566,39 +564,39 @@ export default function App() {
           <form onSubmit={handleAuthSubmit} className="space-y-4">
             {authMode === 'register' && (
               <div>
-                <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5">Full Name</label>
+                <label className="block text-xs font-semibold text-slate-300 mb-1">Full Name</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Logesh V"
                   value={authFormData.name}
                   onChange={(e) => setAuthFormData({ ...authFormData, name: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-700/80 text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 placeholder:text-slate-600 transition"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900/80 border border-slate-700/80 text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 placeholder:text-slate-600 transition"
                 />
               </div>
             )}
 
             <div>
-              <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5">Email Address</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">Email Address</label>
               <input
                 type="email"
                 required
-                placeholder="agileshlogesh@gmail.com"
+                placeholder="vlogesh748@gmail.com"
                 value={authFormData.email}
                 onChange={(e) => setAuthFormData({ ...authFormData, email: e.target.value })}
-                className="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-700/80 text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 placeholder:text-slate-600 transition"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900/80 border border-slate-700/80 text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 placeholder:text-slate-600 transition"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5">Password</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">Password</label>
               <input
                 type="password"
                 required
                 placeholder="••••••••"
                 value={authFormData.password}
                 onChange={(e) => setAuthFormData({ ...authFormData, password: e.target.value })}
-                className="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-700/80 text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 placeholder:text-slate-600 transition"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900/80 border border-slate-700/80 text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 placeholder:text-slate-600 transition"
               />
               <span className="text-[11px] text-slate-500 mt-1 block">Bcrypt salted hashing with JWT authentication.</span>
             </div>
@@ -606,29 +604,29 @@ export default function App() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 px-4 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 rounded-xl font-extrabold text-sm transition shadow-lg glow-emerald flex items-center justify-center gap-2 mt-4 disabled:opacity-50"
+              className="w-full py-3 px-4 neo-button text-white rounded-xl font-semibold text-sm transition shadow-lg flex items-center justify-center gap-2 mt-4 disabled:opacity-50"
             >
               {loading ? (
-                <RefreshCw className="w-5 h-5 animate-spin text-slate-950" />
+                <RefreshCw className="w-4 h-4 animate-spin text-white" />
               ) : (
                 <>
-                  {authMode === 'login' ? 'Authenticate & Enter Vault' : 'Initialize Digital Estate'}
-                  <ArrowRight className="w-4 h-4 text-slate-950" />
+                  {authMode === 'login' ? 'Sign In to Vault' : 'Create Vault Account'}
+                  <ArrowRight className="w-4 h-4 text-white" />
                 </>
               )}
             </button>
           </form>
 
           {/* Security Note */}
-          <div className="mt-6 p-3.5 bg-emerald-950/30 rounded-2xl border border-emerald-900/40 text-xs text-emerald-300/90 leading-relaxed flex items-start gap-2.5">
-            <Shield className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+          <div className="mt-5 p-3 bg-slate-900/50 rounded-xl border border-slate-800 text-xs text-slate-400 leading-relaxed flex items-start gap-2.5">
+            <Lock className="w-4 h-4 text-indigo-400 shrink-0 mt-0.5" />
             <span>
               <strong>Zero Plaintext Storage:</strong> Sensitive credentials are never stored. Only metadata and safe handover instructions are maintained.
             </span>
           </div>
         </div>
 
-        <p className="text-xs text-slate-600 mt-8 text-center font-mono">
+        <p className="text-xs text-slate-600 mt-6 text-center">
           Digital Estate Planner &bull; Academic Viva Project &bull; Secure Full-Stack Architecture
         </p>
       </div>
@@ -643,13 +641,12 @@ export default function App() {
       {/* Toast Feedback */}
       {feedback.message && (
         <div
-          className={`fixed top-5 right-5 z-50 max-w-md px-5 py-3.5 rounded-2xl shadow-2xl border text-xs sm:text-sm font-semibold flex items-start gap-3 backdrop-blur-xl animate-float-subtle ${
-            feedback.type === 'danger'
+          className={`fixed top-5 right-5 z-50 max-w-md px-5 py-3.5 rounded-2xl shadow-2xl border text-xs sm:text-sm font-semibold flex items-start gap-3 backdrop-blur-xl animate-float-subtle ${feedback.type === 'danger'
               ? 'bg-rose-950/95 text-rose-200 border-rose-700/80'
               : feedback.type === 'warning'
-              ? 'bg-amber-950/95 text-amber-200 border-amber-700/80'
-              : 'bg-emerald-950/95 text-emerald-200 border-emerald-600/80'
-          }`}
+                ? 'bg-amber-950/95 text-amber-200 border-amber-700/80'
+                : 'bg-emerald-950/95 text-emerald-200 border-emerald-600/80'
+            }`}
         >
           {feedback.type === 'danger' ? (
             <AlertTriangle className="w-5 h-5 shrink-0 text-rose-400 mt-0.5" />
@@ -667,20 +664,19 @@ export default function App() {
 
       {/* SIDEBAR NAVIGATION */}
       <aside
-        className={`fixed inset-y-0 left-0 z-40 w-72 bg-[#0a0f19] border-r border-slate-800/80 transform transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:inset-auto flex flex-col justify-between ${
-          mobileMenuOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'
-        }`}
+        className={`fixed inset-y-0 left-0 z-40 w-72 bg-[#0d131f]/95 backdrop-blur-2xl border-r border-slate-800/80 transform transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:inset-auto flex flex-col justify-between ${mobileMenuOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'
+          }`}
       >
-        <div className="p-6">
+        <div className="p-5">
           {/* Header Brand */}
-          <div className="flex items-center justify-between pb-6 mb-6 border-b border-slate-800/80">
-            <div className="flex items-center gap-3.5">
-              <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-slate-950 shadow-lg glow-emerald ring-1 ring-emerald-400/40">
-                <Shield className="w-6 h-6 text-slate-950" />
+          <div className="flex items-center justify-between pb-5 mb-5 border-b border-slate-800/80">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-sky-500 flex items-center justify-center text-white shadow-md glow-indigo ring-1 ring-white/20">
+                <Shield className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h2 className="font-extrabold text-base tracking-tight text-white font-display leading-tight">Digital Estate</h2>
-                <span className="text-[11px] text-emerald-400 font-bold uppercase tracking-wider">Asset Vault</span>
+                <h2 className="font-bold text-sm tracking-tight text-white font-display leading-tight">Digital Estate</h2>
+                <span className="text-[11px] text-indigo-400 font-semibold tracking-wide">Secure Vault</span>
               </div>
             </div>
             <button
@@ -692,20 +688,19 @@ export default function App() {
           </div>
 
           {/* Navigation Links */}
-          <nav className="space-y-1.5">
+          <nav className="space-y-1">
             <button
               onClick={() => {
                 setCurrentPage('dashboard');
                 setMobileMenuOpen(false);
               }}
-              className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold transition-all ${
-                currentPage === 'dashboard'
-                  ? 'bg-gradient-to-r from-emerald-500/20 to-teal-500/10 text-emerald-300 border border-emerald-500/40 shadow-sm'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
-              }`}
+              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${currentPage === 'dashboard'
+                  ? 'bg-indigo-600/15 text-indigo-300 border border-indigo-500/30 shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
+                }`}
             >
               <div className="flex items-center gap-3">
-                <Layers className="w-4 h-4 text-emerald-400" />
+                <Layers className={`w-4 h-4 ${currentPage === 'dashboard' ? 'text-indigo-400' : 'text-slate-400'}`} />
                 <span>Dashboard Overview</span>
               </div>
               {isVerificationRequired && <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>}
@@ -716,17 +711,16 @@ export default function App() {
                 setCurrentPage('assets');
                 setMobileMenuOpen(false);
               }}
-              className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold transition-all ${
-                currentPage === 'assets'
-                  ? 'bg-gradient-to-r from-emerald-500/20 to-teal-500/10 text-emerald-300 border border-emerald-500/40 shadow-sm'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
-              }`}
+              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${currentPage === 'assets'
+                  ? 'bg-indigo-600/15 text-indigo-300 border border-indigo-500/30 shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
+                }`}
             >
               <div className="flex items-center gap-3">
-                <Key className="w-4 h-4 text-teal-400" />
+                <Key className={`w-4 h-4 ${currentPage === 'assets' ? 'text-indigo-400' : 'text-slate-400'}`} />
                 <span>Digital Assets Vault</span>
               </div>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-slate-800 text-slate-300 border border-slate-700">
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-slate-800/80 text-slate-300 border border-slate-700/60">
                 {assets.length}
               </span>
             </button>
@@ -736,17 +730,16 @@ export default function App() {
                 setCurrentPage('beneficiaries');
                 setMobileMenuOpen(false);
               }}
-              className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold transition-all ${
-                currentPage === 'beneficiaries'
-                  ? 'bg-gradient-to-r from-emerald-500/20 to-teal-500/10 text-emerald-300 border border-emerald-500/40 shadow-sm'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
-              }`}
+              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${currentPage === 'beneficiaries'
+                  ? 'bg-indigo-600/15 text-indigo-300 border border-indigo-500/30 shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
+                }`}
             >
               <div className="flex items-center gap-3">
-                <Users className="w-4 h-4 text-cyan-400" />
+                <Users className={`w-4 h-4 ${currentPage === 'beneficiaries' ? 'text-indigo-400' : 'text-slate-400'}`} />
                 <span>Designated Beneficiaries</span>
               </div>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-slate-800 text-slate-300 border border-slate-700">
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-slate-800/80 text-slate-300 border border-slate-700/60">
                 {beneficiaries.length}
               </span>
             </button>
@@ -756,20 +749,18 @@ export default function App() {
                 setCurrentPage('checkin');
                 setMobileMenuOpen(false);
               }}
-              className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold transition-all ${
-                currentPage === 'checkin'
-                  ? 'bg-gradient-to-r from-emerald-500/20 to-teal-500/10 text-emerald-300 border border-emerald-500/40 shadow-sm'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
-              }`}
+              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${currentPage === 'checkin'
+                  ? 'bg-indigo-600/15 text-indigo-300 border border-indigo-500/30 shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
+                }`}
             >
               <div className="flex items-center gap-3">
-                <Clock className="w-4 h-4 text-amber-400" />
+                <Clock className={`w-4 h-4 ${currentPage === 'checkin' ? 'text-indigo-400' : 'text-slate-400'}`} />
                 <span>Check-In & Protocol</span>
               </div>
               <span
-                className={`w-2.5 h-2.5 rounded-full ${
-                  isVerificationRequired ? 'bg-amber-400 animate-pulse' : 'bg-emerald-400'
-                }`}
+                className={`w-2 h-2 rounded-full ${isVerificationRequired ? 'bg-amber-400 animate-pulse' : 'bg-emerald-400'
+                  }`}
               ></span>
             </button>
 
@@ -778,13 +769,12 @@ export default function App() {
                 setCurrentPage('review');
                 setMobileMenuOpen(false);
               }}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold transition-all ${
-                currentPage === 'review'
-                  ? 'bg-gradient-to-r from-emerald-500/20 to-teal-500/10 text-emerald-300 border border-emerald-500/40 shadow-sm'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
-              }`}
+              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${currentPage === 'review'
+                  ? 'bg-indigo-600/15 text-indigo-300 border border-indigo-500/30 shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
+                }`}
             >
-              <ShieldAlert className="w-4 h-4 text-rose-400" />
+              <ShieldAlert className={`w-4 h-4 ${currentPage === 'review' ? 'text-indigo-400' : 'text-slate-400'}`} />
               <span>Review Workflow</span>
             </button>
 
@@ -793,24 +783,23 @@ export default function App() {
                 setCurrentPage('notifications');
                 setMobileMenuOpen(false);
               }}
-              className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold transition-all ${
-                currentPage === 'notifications'
-                  ? 'bg-gradient-to-r from-emerald-500/20 to-teal-500/10 text-emerald-300 border border-emerald-500/40 shadow-sm'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
-              }`}
+              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${currentPage === 'notifications'
+                  ? 'bg-indigo-600/15 text-indigo-300 border border-indigo-500/30 shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
+                }`}
             >
               <div className="flex items-center gap-3">
-                <Mail className="w-4 h-4 text-emerald-400" />
+                <Mail className={`w-4 h-4 ${currentPage === 'notifications' ? 'text-indigo-400' : 'text-slate-400'}`} />
                 <span>Email & Trigger Alerts</span>
               </div>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-emerald-950 text-emerald-300 border border-emerald-800/50">
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-indigo-950/80 text-indigo-300 border border-indigo-800/50">
                 LIVE
               </span>
             </button>
 
             {/* Academic Viva Section */}
-            <div className="pt-5 mt-5 border-t border-slate-800/80">
-              <span className="text-[10px] uppercase tracking-wider text-slate-500 font-bold px-4 block mb-2">
+            <div className="pt-4 mt-4 border-t border-slate-800/80">
+              <span className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold px-3.5 block mb-1.5">
                 Project Evaluation
               </span>
               <button
@@ -818,13 +807,12 @@ export default function App() {
                   setCurrentPage('viva');
                   setMobileMenuOpen(false);
                 }}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold transition-all ${
-                  currentPage === 'viva'
-                    ? 'bg-gradient-to-r from-cyan-500/20 to-blue-500/10 text-cyan-300 border border-cyan-500/40 shadow-sm'
-                    : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
-                }`}
+                className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${currentPage === 'viva'
+                    ? 'bg-sky-600/15 text-sky-300 border border-sky-500/30 shadow-sm'
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
+                  }`}
               >
-                <BookOpen className="w-4 h-4 text-cyan-400" />
+                <BookOpen className={`w-4 h-4 ${currentPage === 'viva' ? 'text-sky-400' : 'text-slate-400'}`} />
                 <span>Viva Q&A & Architecture</span>
               </button>
             </div>
@@ -868,8 +856,8 @@ export default function App() {
       {/* MAIN CONTENT AREA */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* TOP BAR */}
-        <header className="bg-[#0a0f19]/90 backdrop-blur-xl border-b border-slate-800/80 px-5 py-4 flex items-center justify-between sticky top-0 z-20">
-          <div className="flex items-center gap-3.5">
+        <header className="bg-[#0d131f]/90 backdrop-blur-2xl border-b border-slate-800/80 px-5 py-3.5 flex items-center justify-between sticky top-0 z-20">
+          <div className="flex items-center gap-3">
             <button
               onClick={() => setMobileMenuOpen(true)}
               className="md:hidden p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60"
@@ -877,12 +865,12 @@ export default function App() {
               <Menu className="w-5 h-5" />
             </button>
             <div>
-              <h1 className="text-base sm:text-lg font-extrabold text-white capitalize font-display leading-tight">
+              <h1 className="text-sm sm:text-base font-bold text-white capitalize font-display leading-tight">
                 {currentPage === 'viva'
                   ? 'Viva Q&A & Architecture Guide'
                   : currentPage === 'checkin'
-                  ? 'Check-In Safety Protocol'
-                  : currentPage.replace('-', ' ')}
+                    ? 'Check-In Safety Protocol'
+                    : currentPage.replace('-', ' ')}
               </h1>
               <p className="text-[11px] text-slate-400 hidden sm:block">
                 Digital Legacy Vault &bull; Periodic Safety Verification Protocol
@@ -891,27 +879,26 @@ export default function App() {
           </div>
 
           {/* Quick Action Buttons */}
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2">
             <button
               onClick={handleCheckIn}
               disabled={loading}
-              className="flex items-center gap-1.5 px-3.5 py-2 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 rounded-xl text-xs font-extrabold shadow-md glow-emerald transition disabled:opacity-50"
+              className="flex items-center gap-1.5 px-3 py-1.5 neo-button text-white rounded-xl text-xs font-semibold shadow-sm transition disabled:opacity-50"
               title="Confirm you are safe and active right now"
             >
-              <CheckCircle className="w-3.5 h-3.5 text-slate-950" />
+              <CheckCircle className="w-3.5 h-3.5 text-white" />
               <span>Confirm Check-In</span>
             </button>
 
             <button
               onClick={() => handleSimulateInactivity(!isVerificationRequired)}
-              className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold border transition ${
-                isVerificationRequired
-                  ? 'bg-emerald-950/60 text-emerald-300 border-emerald-600/50 hover:bg-emerald-900/60'
-                  : 'bg-amber-950/60 text-amber-300 border-amber-600/50 hover:bg-amber-900/60'
-              }`}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border transition ${isVerificationRequired
+                  ? 'bg-emerald-950/40 text-emerald-300 border-emerald-600/40 hover:bg-emerald-900/40'
+                  : 'bg-slate-800/80 text-slate-300 border-slate-700/80 hover:bg-slate-700/80'
+                }`}
               title="Viva Test: Simulate elapsed days to test system reactions"
             >
-              <Clock className="w-3.5 h-3.5" />
+              <Clock className="w-3.5 h-3.5 text-indigo-400" />
               <span className="hidden sm:inline">
                 {isVerificationRequired ? 'Reset Inactivity' : 'Simulate Overdue (>30d)'}
               </span>
@@ -928,17 +915,17 @@ export default function App() {
             <div className="space-y-6">
               {/* Overdue Alert Banner if prolonged inactivity */}
               {isVerificationRequired ? (
-                <div className="p-5 sm:p-6 rounded-3xl border border-amber-500/40 bg-gradient-to-r from-amber-950/80 via-slate-900/90 to-amber-950/60 shadow-2xl relative overflow-hidden">
+                <div className="p-5 rounded-2xl border border-amber-500/30 bg-gradient-to-r from-amber-950/40 via-slate-900/90 to-amber-950/30 shadow-xl relative overflow-hidden">
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                    <div className="flex items-start gap-4">
-                      <div className="p-3 bg-amber-500/20 text-amber-400 rounded-2xl shrink-0 border border-amber-500/30">
-                        <AlertTriangle className="w-7 h-7" />
+                    <div className="flex items-start gap-3.5">
+                      <div className="p-2.5 bg-amber-500/15 text-amber-400 rounded-xl shrink-0 border border-amber-500/30">
+                        <AlertTriangle className="w-6 h-6" />
                       </div>
                       <div>
-                        <span className="text-[10px] font-mono uppercase tracking-wider text-amber-400 font-bold px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/20">
+                        <span className="text-[10px] uppercase tracking-wider text-amber-400 font-bold px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/20">
                           SAFETY PROTOCOL TRIGGERED
                         </span>
-                        <h3 className="text-base sm:text-lg font-extrabold text-white mt-1 font-display">
+                        <h3 className="text-sm sm:text-base font-bold text-white mt-1 font-display">
                           Inactivity Threshold Met — Verification Required
                         </h3>
                         <p className="text-xs text-slate-300 mt-1 leading-relaxed max-w-2xl">
@@ -947,16 +934,16 @@ export default function App() {
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2.5 shrink-0">
+                    <div className="flex items-center gap-2 shrink-0">
                       <button
                         onClick={handleCheckIn}
-                        className="px-4 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 rounded-xl text-xs font-extrabold shadow-md glow-emerald transition"
+                        className="px-3.5 py-2 neo-button text-white rounded-xl text-xs font-semibold shadow-sm transition"
                       >
                         Confirm I am Active
                       </button>
                       <button
                         onClick={() => setCurrentPage('review')}
-                        className="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold border border-slate-700 transition"
+                        className="px-3.5 py-2 bg-slate-800/80 hover:bg-slate-700/80 text-slate-200 rounded-xl text-xs font-semibold border border-slate-700/80 transition"
                       >
                         View Protocol
                       </button>
@@ -964,11 +951,13 @@ export default function App() {
                   </div>
                 </div>
               ) : (
-                <div className="p-4 sm:p-5 rounded-2xl border border-emerald-500/30 bg-gradient-to-r from-emerald-950/40 to-slate-900/60 flex items-center justify-between">
-                  <div className="flex items-center gap-3.5">
-                    <CheckCircle className="w-5 h-5 text-emerald-400 shrink-0" />
+                <div className="p-4 rounded-xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-xl flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-emerald-500/15 text-emerald-400 flex items-center justify-center border border-emerald-500/30">
+                      <CheckCircle className="w-4 h-4 text-emerald-400" />
+                    </div>
                     <div>
-                      <span className="text-xs font-bold text-emerald-300">Estate Status is Active & Safe</span>
+                      <span className="text-xs font-semibold text-slate-200">Estate Status is Active & Safe</span>
                       <span className="text-xs text-slate-400 ml-2 hidden sm:inline">
                         Your check-in is verified. Next routine verification in {checkInStatus.daysRemaining} days.
                       </span>
@@ -976,7 +965,7 @@ export default function App() {
                   </div>
                   <button
                     onClick={handleCheckIn}
-                    className="text-xs font-bold text-emerald-400 hover:text-emerald-300 underline underline-offset-4"
+                    className="text-xs font-semibold text-indigo-400 hover:text-indigo-300 transition"
                   >
                     Quick Check-In Now &rarr;
                   </button>
@@ -984,50 +973,49 @@ export default function App() {
               )}
 
               {/* Welcome Card & Estate Progress Bar */}
-              <div className="glass-card rounded-3xl p-6 sm:p-8 border border-white/10 relative overflow-hidden">
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-6">
+              <div className="glass-card rounded-2xl p-6 sm:p-7 border border-white/10 relative overflow-hidden">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-5 mb-5">
                   <div>
-                    <h2 className="text-2xl sm:text-3xl font-extrabold text-white font-display">
-                      Welcome, <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300">{currentUser?.name || 'Owner'}</span>
+                    <h2 className="text-xl sm:text-2xl font-bold text-white font-display">
+                      Welcome, <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-sky-300 to-teal-300">{currentUser?.name || 'Owner'}</span>
                     </h2>
                     <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-xl">
-                      Manage your secure digital legacy. Store account handles, recovery instructions, and designated trustee contacts.
+                      Manage your digital legacy. Store account handles, recovery instructions, and designated trustee contacts.
                     </p>
                   </div>
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2.5">
                     <button
                       onClick={() => handleOpenAssetModal()}
-                      className="px-4 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 rounded-xl text-xs font-extrabold shadow-lg glow-emerald transition flex items-center gap-2"
+                      className="px-3.5 py-2.5 neo-button text-white rounded-xl text-xs font-semibold shadow-md transition flex items-center gap-2"
                     >
-                      <Plus className="w-4 h-4 text-slate-950" />
+                      <Plus className="w-4 h-4 text-white" />
                       <span>Add Digital Asset</span>
                     </button>
                     <button
                       onClick={() => handleOpenBeneficiaryModal()}
-                      className="px-4 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold border border-slate-700 transition flex items-center gap-2"
+                      className="px-3.5 py-2.5 bg-slate-800/80 hover:bg-slate-700/80 text-slate-200 rounded-xl text-xs font-semibold border border-slate-700/80 transition flex items-center gap-2"
                     >
-                      <Users className="w-4 h-4 text-cyan-400" />
+                      <Users className="w-4 h-4 text-sky-400" />
                       <span>Add Beneficiary</span>
                     </button>
                   </div>
                 </div>
 
                 {/* Progress bar countdown */}
-                <div className="pt-6 border-t border-slate-800/80">
-                  <div className="flex items-center justify-between text-xs font-bold text-slate-300 mb-2">
+                <div className="pt-5 border-t border-slate-800/80">
+                  <div className="flex items-center justify-between text-xs font-semibold text-slate-300 mb-2">
                     <span className="flex items-center gap-1.5">
-                      <Clock className="w-3.5 h-3.5 text-emerald-400" />
+                      <Clock className="w-3.5 h-3.5 text-indigo-400" />
                       <span>Days Elapsed: {checkInStatus.daysSinceLastCheckIn} days</span>
                     </span>
-                    <span className="text-slate-400">Allowed Inactivity: {checkInStatus.inactivityPeriod} days</span>
+                    <span className="text-slate-400 font-normal">Allowed Inactivity: {checkInStatus.inactivityPeriod} days</span>
                   </div>
-                  <div className="w-full h-3 bg-slate-900 rounded-full overflow-hidden p-0.5 border border-slate-800">
+                  <div className="w-full h-2.5 bg-slate-900 rounded-full overflow-hidden p-0.5 border border-slate-800/80">
                     <div
-                      className={`h-full rounded-full transition-all duration-700 ${
-                        isVerificationRequired
+                      className={`h-full rounded-full transition-all duration-700 ${isVerificationRequired
                           ? 'bg-gradient-to-r from-amber-500 to-rose-500 glow-amber'
-                          : 'bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-400 glow-emerald'
-                      }`}
+                          : 'bg-gradient-to-r from-indigo-500 via-sky-400 to-teal-400 glow-indigo'
+                        }`}
                       style={{
                         width: `${Math.min(
                           100,
@@ -1048,52 +1036,52 @@ export default function App() {
               </div>
 
               {/* 4 Metric Summary Cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
                 <div
                   onClick={() => setCurrentPage('assets')}
-                  className="glass-card rounded-2xl p-5 border border-white/5 cursor-pointer"
+                  className="glass-card rounded-xl p-4 sm:p-5 border border-white/5 cursor-pointer"
                 >
-                  <div className="flex items-center justify-between text-slate-400 mb-3">
-                    <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Digital Assets</span>
-                    <div className="p-2.5 bg-emerald-500/10 text-emerald-400 rounded-xl border border-emerald-500/20">
+                  <div className="flex items-center justify-between text-slate-400 mb-2.5">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Digital Assets</span>
+                    <div className="p-2 bg-indigo-500/10 text-indigo-400 rounded-lg border border-indigo-500/20">
                       <Key className="w-4 h-4" />
                     </div>
                   </div>
-                  <div className="text-3xl font-extrabold text-white font-display">{assets.length}</div>
+                  <div className="text-2xl sm:text-3xl font-bold text-white font-display">{assets.length}</div>
                   <p className="text-[11px] text-slate-400 mt-1">Cataloged accounts & keys</p>
                 </div>
 
                 <div
                   onClick={() => setCurrentPage('beneficiaries')}
-                  className="glass-card rounded-2xl p-5 border border-white/5 cursor-pointer"
+                  className="glass-card rounded-xl p-4 sm:p-5 border border-white/5 cursor-pointer"
                 >
-                  <div className="flex items-center justify-between text-slate-400 mb-3">
-                    <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Beneficiaries</span>
-                    <div className="p-2.5 bg-cyan-500/10 text-cyan-400 rounded-xl border border-cyan-500/20">
+                  <div className="flex items-center justify-between text-slate-400 mb-2.5">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Beneficiaries</span>
+                    <div className="p-2 bg-sky-500/10 text-sky-400 rounded-lg border border-sky-500/20">
                       <Users className="w-4 h-4" />
                     </div>
                   </div>
-                  <div className="text-3xl font-extrabold text-white font-display">{beneficiaries.length}</div>
+                  <div className="text-2xl sm:text-3xl font-bold text-white font-display">{beneficiaries.length}</div>
                   <p className="text-[11px] text-slate-400 mt-1">Designated heirs & trustees</p>
                 </div>
 
                 <div
                   onClick={() => setCurrentPage('checkin')}
-                  className="glass-card rounded-2xl p-5 border border-white/5 cursor-pointer"
+                  className="glass-card rounded-xl p-4 sm:p-5 border border-white/5 cursor-pointer"
                 >
-                  <div className="flex items-center justify-between text-slate-400 mb-3">
-                    <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Last Check-In</span>
-                    <div className="p-2.5 bg-teal-500/10 text-teal-400 rounded-xl border border-teal-500/20">
+                  <div className="flex items-center justify-between text-slate-400 mb-2.5">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Last Check-In</span>
+                    <div className="p-2 bg-teal-500/10 text-teal-400 rounded-lg border border-teal-500/20">
                       <Clock className="w-4 h-4" />
                     </div>
                   </div>
-                  <div className="text-sm font-extrabold text-white font-display truncate">
+                  <div className="text-sm sm:text-base font-bold text-white font-display truncate">
                     {checkInStatus.lastCheckIn
                       ? new Date(checkInStatus.lastCheckIn).toLocaleDateString(undefined, {
-                          month: 'short',
-                          day: 'numeric',
-                          year: 'numeric'
-                        })
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric'
+                      })
                       : 'Recorded'}
                   </div>
                   <p className="text-[11px] text-slate-400 mt-1">{checkInStatus.daysSinceLastCheckIn} days elapsed</p>
@@ -1101,32 +1089,29 @@ export default function App() {
 
                 <div
                   onClick={() => setCurrentPage('checkin')}
-                  className="glass-card rounded-2xl p-5 border border-white/5 cursor-pointer"
+                  className="glass-card rounded-xl p-4 sm:p-5 border border-white/5 cursor-pointer"
                 >
-                  <div className="flex items-center justify-between text-slate-400 mb-3">
-                    <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Status</span>
+                  <div className="flex items-center justify-between text-slate-400 mb-2.5">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Status</span>
                     <div
-                      className={`p-2.5 rounded-xl border ${
-                        isVerificationRequired
+                      className={`p-2 rounded-lg border ${isVerificationRequired
                           ? 'bg-amber-500/10 text-amber-400 border-amber-500/20'
                           : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
-                      }`}
+                        }`}
                     >
                       <Shield className="w-4 h-4" />
                     </div>
                   </div>
                   <div>
                     <span
-                      className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${
-                        isVerificationRequired
-                          ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
-                          : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                      }`}
+                      className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold ${isVerificationRequired
+                          ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
+                          : 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
+                        }`}
                     >
                       <span
-                        className={`w-1.5 h-1.5 rounded-full ${
-                          isVerificationRequired ? 'bg-amber-400 animate-ping' : 'bg-emerald-400'
-                        }`}
+                        className={`w-1.5 h-1.5 rounded-full ${isVerificationRequired ? 'bg-amber-400 animate-ping' : 'bg-emerald-400'
+                          }`}
                       ></span>
                       {isVerificationRequired ? 'VERIFICATION' : 'ACTIVE'}
                     </span>
@@ -1157,7 +1142,7 @@ export default function App() {
                       <span>1. Test Trigger Mail</span>
                       <Send className="w-3.5 h-3.5 text-emerald-400" />
                     </div>
-                    <p className="text-[11px] text-slate-400 mt-1">Sends live Gmail alert to {testEmailRecipient}</p>
+                    <p className="text-[11px] text-slate-400 mt-1">Sends live Gmail alert to <span className="text-emerald-400 font-medium">{testEmailRecipient || currentUser?.email || 'your registered email'}</span></p>
                   </button>
 
                   <button
@@ -1563,11 +1548,10 @@ export default function App() {
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-slate-800/80">
                   <div className="flex items-start gap-4">
                     <div
-                      className={`p-4 rounded-2xl border ${
-                        isVerificationRequired
+                      className={`p-4 rounded-2xl border ${isVerificationRequired
                           ? 'bg-amber-500/20 text-amber-400 border-amber-500/30'
                           : 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
-                      }`}
+                        }`}
                     >
                       {isVerificationRequired ? <AlertTriangle className="w-8 h-8" /> : <CheckCircle className="w-8 h-8" />}
                     </div>
@@ -1606,11 +1590,10 @@ export default function App() {
                   </h4>
                   <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                     <div
-                      className={`p-4 rounded-2xl border ${
-                        !isVerificationRequired
+                      className={`p-4 rounded-2xl border ${!isVerificationRequired
                           ? 'bg-emerald-950/40 border-emerald-500/50 text-white'
                           : 'bg-slate-900/60 border-slate-800 text-slate-400'
-                      }`}
+                        }`}
                     >
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-xs font-bold text-emerald-400">Stage 1</span>
@@ -1621,11 +1604,10 @@ export default function App() {
                     </div>
 
                     <div
-                      className={`p-4 rounded-2xl border ${
-                        isVerificationRequired
+                      className={`p-4 rounded-2xl border ${isVerificationRequired
                           ? 'bg-amber-950/40 border-amber-500/50 text-white'
                           : 'bg-slate-900/60 border-slate-800 text-slate-400'
-                      }`}
+                        }`}
                     >
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-xs font-bold text-amber-400">Stage 2</span>
@@ -1842,13 +1824,12 @@ export default function App() {
                           <div className="space-y-1">
                             <div className="flex items-center gap-2">
                               <span
-                                className={`text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider ${
-                                  log.type === 'INACTIVITY_WARNING'
+                                className={`text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider ${log.type === 'INACTIVITY_WARNING'
                                     ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
                                     : log.type === 'BENEFICIARY_ALERT'
-                                    ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
-                                    : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                                }`}
+                                      ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
+                                      : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                                  }`}
                               >
                                 {log.type}
                               </span>
@@ -1860,11 +1841,10 @@ export default function App() {
                           </div>
                           <div className="flex items-center gap-2">
                             <span
-                              className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                                log.status === 'DELIVERED_REAL'
+                              className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${log.status === 'DELIVERED_REAL'
                                   ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
                                   : 'bg-slate-800 text-slate-400 border border-slate-700'
-                              }`}
+                                }`}
                             >
                               {log.status === 'DELIVERED_REAL' ? 'Delivered Live' : 'Recorded'}
                             </span>
