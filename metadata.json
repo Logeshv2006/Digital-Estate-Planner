@@ -1,0 +1,8 @@
+{
+  "name": "Digital Estate Planner (Updated)",
+  "description": "Secure digital estate asset preservation vault, inactivity safety verification protocol, verified Gmail SMTP notification alerts, and designated beneficiary handovers.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "users": [
+    {
+      "id": "user-initial-101",
+      "name": "Logesh V",
+      "email": "agileshlogesh@gmail.com",
+      "passwordHash": "$2b$10$G2bcZMUxdkeRecCTm.GXku96FDzIyrmIPmf8ZGhTGpwqpzj70Xsai",
+      "lastCheckIn": "2026-10-19T03:10:15.091Z",
+      "inactivityPeriod": 30,
+      "createdAt": "2026-10-19T03:10:15.091Z",
+      "isSimulatedOverdue": false
+    }
+  ],
+  "assets": [
+    {
+      "_id": "asset-1",
+      "userId": "user-initial-101",
+      "assetName": "Primary Google Workspace Account",
+      "assetType": "Email Account",
+      "description": "Contains personal communications, tax documents, and Google Drive files.",
+      "website": "https://mail.google.com",
+      "username": "agileshlogesh@gmail.com",
+      "instructions": "2FA backup recovery codes are stored in the physical bank safety deposit box #412.",
+      "createdAt": "2026-10-19T03:10:15.091Z"
+    },
+    {
+      "_id": "asset-2",
+      "userId": "user-initial-101",
+      "assetName": "Ethereum & Bitcoin Hardware Vault",
+      "assetType": "Financial / Crypto",
+      "description": "Cold storage hardware wallet for long-term digital asset reserves.",
+      "website": "https://ledger.com",
+      "username": "ledger_vault_01",
+      "instructions": "Do NOT share recovery seed phrases online. The 24-word seed card is placed in the home fireproof safe.",
+      "createdAt": "2026-10-19T03:10:15.091Z"
+    },
+    {
+      "_id": "asset-3",
+      "userId": "user-initial-101",
+      "assetName": "AWS Cloud Server & Domain Portfolio",
+      "assetType": "Domain & Hosting",
+      "description": "Hosts personal projects, portfolio, and family photo archives.",
+      "website": "https://aws.amazon.com",
+      "username": "root-admin",
+      "instructions": "Root email access is linked to Primary Gmail. Designee should archive S3 Glacier backups.",
+      "createdAt": "2026-10-19T03:10:15.091Z"
+    }
+  ],
+  "beneficiaries": [
+    {
+      "_id": "ben-1",
+      "userId": "user-initial-101",
+      "name": "Agilesh V (Primary Designee)",
+      "relationship": "Primary Beneficiary",
+      "email": "agileshlogesh@gmail.com",
+      "phone": "+91 98765 43210",
+      "createdAt": "2026-10-19T03:10:15.091Z"
+    },
+    {
+      "_id": "ben-2",
+      "userId": "user-initial-101",
+      "name": "Family Estate Trustee",
+      "relationship": "Co-Trustee",
+      "email": "agileshlogesh@gmail.com",
+      "phone": "+91 91234 56789",
+      "createdAt": "2026-10-19T03:10:15.091Z"
+    }
+  ],
+  "logs": [
+    {
+      "id": "log_1792379557439_ca4c",
+      "timestamp": "2026-10-19T03:12:41.067Z",
+      "to": "agileshlogesh@gmail.com",
+      "subject": "Digital Estate Planner: Safety Protocol Test Notification",
+      "type": "TEST_EMAIL",
+      "status": "DELIVERED_REAL",
+      "details": "Dispatched live via Gmail SMTP (Message ID: <354bc60a-63e1-7022-4ce0-24b5cc91cc01@gmail.com>)",
+      "messageId": "<354bc60a-63e1-7022-4ce0-24b5cc91cc01@gmail.com>",
+      "bodyHtml": "\n      <div style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; background: #0b0f19; border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 14px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.5);\">\n        <div style=\"background: linear-gradient(135deg, #059669 0%, #047857 100%); padding: 24px; text-align: center;\">\n          <h1 style=\"color: #ffffff; font-size: 20px; margin: 0; font-weight: 800;\">Digital Estate Planner</h1>\n          <p style=\"color: #d1fae5; font-size: 12px; margin-top: 4px;\">Automated Notification & Protocol Dispatcher</p>\n        </div>\n        <div style=\"padding: 28px 24px; color: #e2e8f0; line-height: 1.6; background: #0d131f;\">\n          <div style=\"display: inline-block; background: rgba(16, 185, 129, 0.2); color: #34d399; font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 20px; margin-bottom: 12px; border: 1px solid rgba(16, 185, 129, 0.4);\">\n            TEST DISPATCH VERIFIED\n          </div>\n          <h2 style=\"color: #f8fafc; font-size: 18px; margin: 0 0 12px;\">Email Dispatch Engine Active</h2>\n          <p>Hello,</p>\n          <p>This email confirms that the <strong>Digital Estate Planner</strong> notification engine is successfully connected and delivering messages through Gmail SMTP.</p>\n          <div style=\"background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; margin: 20px 0;\">\n            <p style=\"margin: 0; font-size: 13px; color: #94a3b8;\"><strong>Engine Status:</strong> Operational</p>\n            <p style=\"margin: 6px 0 0; font-size: 13px; color: #94a3b8;\"><strong>Target Recipient:</strong> agileshlogesh@gmail.com</p>\n            <p style=\"margin: 6px 0 0; font-size: 13px; color: #94a3b8;\"><strong>Sender:</strong> agileshlogesh@gmail.com (Gmail SMTP)</p>\n            <p style=\"margin: 6px 0 0; font-size: 13px; color: #94a3b8;\"><strong>Server Timestamp:</strong> 10/19/2026, 8:42:37 AM</p>\n          </div>\n          <p style=\"font-size: 13px; color: #94a3b8;\">In production, this system monitors periodic check-in schedules and dispatches alerts before initiating secondary estate review workflows.</p>\n        </div>\n        <div style=\"background: #070a0f; padding: 16px; text-align: center; font-size: 11px; color: #64748b;\">\n          Digital Estate Planner &bull; Automated Safety Engine &bull; Confidential\n        </div>\n      </div>\n    "
+    },
+    {
+      "id": "log_1792379497467_and2",
+      "timestamp": "2026-10-19T03:11:41.470Z",
+      "to": "agileshlogesh@gmail.com",
+      "subject": "Digital Estate Planner: Safety Protocol Test Notification",
+      "type": "TEST_EMAIL",
+      "status": "DELIVERED_REAL",
+      "details": "Dispatched live via Gmail SMTP (Message ID: <4a03ae5a-8937-57d9-d787-096a3abbc39b@gmail.com>)",
+      "messageId": "<4a03ae5a-8937-57d9-d787-096a3abbc39b@gmail.com>",
+      "bodyHtml": "\n      <div style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; background: #0b0f19; border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 14px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.5);\">\n        <div style=\"background: linear-gradient(135deg, #059669 0%, #047857 100%); padding: 24px; text-align: center;\">\n          <h1 style=\"color: #ffffff; font-size: 20px; margin: 0; font-weight: 800;\">Digital Estate Planner</h1>\n          <p style=\"color: #d1fae5; font-size: 12px; margin-top: 4px;\">Automated Notification & Protocol Dispatcher</p>\n        </div>\n        <div style=\"padding: 28px 24px; color: #e2e8f0; line-height: 1.6; background: #0d131f;\">\n          <div style=\"display: inline-block; background: rgba(16, 185, 129, 0.2); color: #34d399; font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 20px; margin-bottom: 12px; border: 1px solid rgba(16, 185, 129, 0.4);\">\n            TEST DISPATCH VERIFIED\n          </div>\n          <h2 style=\"color: #f8fafc; font-size: 18px; margin: 0 0 12px;\">Email Dispatch Engine Active</h2>\n          <p>Hello,</p>\n          <p>This email confirms that the <strong>Digital Estate Planner</strong> notification engine is successfully connected and delivering messages through Gmail SMTP.</p>\n          <div style=\"background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; margin: 20px 0;\">\n            <p style=\"margin: 0; font-size: 13px; color: #94a3b8;\"><strong>Engine Status:</strong> Operational</p>\n            <p style=\"margin: 6px 0 0; font-size: 13px; color: #94a3b8;\"><strong>Target Recipient:</strong> agileshlogesh@gmail.com</p>\n            <p style=\"margin: 6px 0 0; font-size: 13px; color: #94a3b8;\"><strong>Sender:</strong> agileshlogesh@gmail.com (Gmail SMTP)</p>\n            <p style=\"margin: 6px 0 0; font-size: 13px; color: #94a3b8;\"><strong>Server Timestamp:</strong> 10/19/2026, 8:41:37 AM</p>\n          </div>\n          <p style=\"font-size: 13px; color: #94a3b8;\">In production, this system monitors periodic check-in schedules and dispatches alerts before initiating secondary estate review workflows.</p>\n        </div>\n        <div style=\"background: #070a0f; padding: 16px; text-align: center; font-size: 11px; color: #64748b;\">\n          Digital Estate Planner &bull; Automated Safety Engine &bull; Confidential\n        </div>\n      </div>\n    "
+    },
+    {
+      "id": "log_1792379491820_ta3g",
+      "timestamp": "2026-10-19T03:11:35.618Z",
+      "to": "agileshlogesh@gmail.com",
+      "subject": "Digital Estate Planner: Safety Protocol Test Notification",
+      "type": "TEST_EMAIL",
+      "status": "DELIVERED_REAL",
+      "details": "Dispatched live via Gmail SMTP (Message ID: <3f374fa3-1827-c2b6-1861-99695d9a98bf@gmail.com>)",
+      "messageId": "<3f374fa3-1827-c2b6-1861-99695d9a98bf@gmail.com>",
+      "bodyHtml": "\n      <div style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; background: #0b0f19; border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 14px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.5);\">\n        <div style=\"background: linear-gradient(135deg, #059669 0%, #047857 100%); padding: 24px; text-align: center;\">\n          <h1 style=\"color: #ffffff; font-size: 20px; margin: 0; font-weight: 800;\">Digital Estate Planner</h1>\n          <p style=\"color: #d1fae5; font-size: 12px; margin-top: 4px;\">Automated Notification & Protocol Dispatcher</p>\n        </div>\n        <div style=\"padding: 28px 24px; color: #e2e8f0; line-height: 1.6; background: #0d131f;\">\n          <div style=\"display: inline-block; background: rgba(16, 185, 129, 0.2); color: #34d399; font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 20px; margin-bottom: 12px; border: 1px solid rgba(16, 185, 129, 0.4);\">\n            TEST DISPATCH VERIFIED\n          </div>\n          <h2 style=\"color: #f8fafc; font-size: 18px; margin: 0 0 12px;\">Email Dispatch Engine Active</h2>\n          <p>Hello,</p>\n          <p>This email confirms that the <strong>Digital Estate Planner</strong> notification engine is successfully connected and delivering messages through Gmail SMTP.</p>\n          <div style=\"background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; margin: 20px 0;\">\n            <p style=\"margin: 0; font-size: 13px; color: #94a3b8;\"><strong>Engine Status:</strong> Operational</p>\n            <p style=\"margin: 6px 0 0; font-size: 13px; color: #94a3b8;\"><strong>Target Recipient:</strong> agileshlogesh@gmail.com</p>\n            <p style=\"margin: 6px 0 0; font-size: 13px; color: #94a3b8;\"><strong>Sender:</strong> agileshlogesh@gmail.com (Gmail SMTP)</p>\n            <p style=\"margin: 6px 0 0; font-size: 13px; color: #94a3b8;\"><strong>Server Timestamp:</strong> 10/19/2026, 8:41:31 AM</p>\n          </div>\n          <p style=\"font-size: 13px; color: #94a3b8;\">In production, this system monitors periodic check-in schedules and dispatches alerts before initiating secondary estate review workflows.</p>\n        </div>\n        <div style=\"background: #070a0f; padding: 16px; text-align: center; font-size: 11px; color: #64748b;\">\n          Digital Estate Planner &bull; Automated Safety Engine &bull; Confidential\n        </div>\n      </div>\n    "
+    }
+  ]
+}
